@@ -76,5 +76,5 @@ Generates and processes simulated payment events.
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/dikshuanandpure/SwitchGuard-AI.git
 cd SwitchGuard-AI
