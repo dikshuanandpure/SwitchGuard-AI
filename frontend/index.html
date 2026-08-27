@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SwitchGuard AI</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+    <div class="dashboard">
+
+
+        <!-- ================================= -->
+        <!-- HEADER -->
+        <!-- ================================= -->
+
+        <header>
+
+            <div class="header-left">
+
+                <h1>
+                    ⚡ SwitchGuard AI
+                </h1>
+
+                <p>
+                    Real-Time Payment Failure &
+                    Outage Detection System
+                </p>
+
+            </div>
+
+
+            <div class="live-status">
+
+                <span class="dot"></span>
+
+                LIVE MONITORING
+
+            </div>
+
+        </header>
+
+<!-- ================================= -->
+<!-- SIMULATION CONTROLS -->
+<!-- ================================= -->
+
+<section class="panel simulation-panel">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+                🎮 Simulation Controls
+            </h2>
+
+            <p>
+                Test SwitchGuard AI against different
+                payment failure scenarios.
+            </p>
+
+        </div>
+
+        <button
+            class="reset-button"
+            onclick="resetSystem()"
+        >
+            ↻ Reset System
+        </button>
+
+    </div>
+
+
+    <div class="scenario-buttons">
+
+    <button class="scenario-btn"
+        onclick="runScenario('normal')">
+        ✓ Normal Traffic
+    </button>
+
+    <button class="scenario-btn"
+        onclick="runScenario('small_sample')">
+        ⚠ Small Sample
+    </button>
+
+    <button class="scenario-btn"
+        onclick="runScenario('partial_outage')">
+        📉 Partial Outage
+    </button>
+
+    <button class="scenario-btn"
+        onclick="runScenario('full_outage')">
+        🚨 Full Outage
+    </button>
+
+    <button class="scenario-btn"
+        onclick="runScenario('mixed_failures')">
+        🔀 Mixed Failures
+    </button>
+
+</div>
+
+
+    <div class="scenario-result">
+
+        Current Scenario:
+
+        <strong id="currentScenario">
+            INITIAL SYSTEM DATA
+        </strong>
+
+    </div>
+
+</section>
+
+        <!-- ================================= -->
+        <!-- STATISTICS -->
+        <!-- ================================= -->
+
+        <section class="stats">
+
+            <div class="card">
+
+                <h3>Total Events</h3>
+
+                <h2 id="totalEvents">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Failed Transactions</h3>
+
+                <h2 id="failedTransactions">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card warning">
+
+                <h3>Active Incidents</h3>
+
+                <h2 id="activeIncidents">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card danger">
+
+                <h3>High Confidence Outages</h3>
+
+                <h2 id="highOutages">
+                    0
+                </h2>
+
+            </div>
+<div class="stat-card">
+    <div class="stat-icon">💸</div>
+
+    <div class="stat-content">
+        <p>Revenue At Risk</p>
+
+        <h2 id="revenueAtRisk">
+            ₹0
+        </h2>
+    </div>
+</div>
+
+
+<div class="stat-card">
+    <div class="stat-icon">💰</div>
+
+    <div class="stat-content">
+        <p>Revenue Recovered</p>
+
+        <h2 id="revenueRecovered">
+            ₹0
+        </h2>
+    </div>
+</div>
+
+
+<div class="stat-card">
+    <div class="stat-icon">📈</div>
+
+    <div class="stat-content">
+        <p>Recovery Rate</p>
+
+        <h2 id="recoveryRate">
+            0%
+        </h2>
+    </div>
+</div>
+        </section>
+
+
+
+        <!-- ================================= -->
+        <!-- BANK STATUS + INCIDENTS -->
+        <!-- ================================= -->
+
+        <section class="main-grid">
+
+
+            <!-- BANK STATUS -->
+
+            <div class="panel">
+
+                <h2>
+                    🏦 Bank Status
+                </h2>
+
+                <div
+                    class="bank-list"
+                    id="bankStatusList"
+                >
+                </div>
+
+            </div>
+
+
+
+            <!-- ACTIVE INCIDENTS -->
+
+            <div class="panel">
+
+                <h2>
+                    🚨 Active Incidents
+                </h2>
+
+                <div
+                    id="incidentList"
+                >
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================= -->
+        <!-- RECOVERY ACTIONS -->
+        <!-- ================================= -->
+
+        <section class="panel recovery">
+
+    <h2>
+        🔄 Recovery Actions
+    </h2>
+
+    <button
+        id="simulateRecoveryBtn"
+        onclick="simulateRecovery()"
+    >
+        ⚡ Simulate AI Recovery
+    </button>
+
+    <div
+        class="recovery-grid"
+        id="recoveryList"
+    >
+    </div>
+
+</section>
+
+        <!-- ================================= -->
+<!-- INCIDENT TIMELINE -->
+<!-- ================================= -->
+
+<section class="panel timeline-panel">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+                🚨 Incident Timeline
+            </h2>
+
+            <p>
+                Real-time incident lifecycle detected
+                by SwitchGuard AI
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="incident-timeline"
+        id="incidentTimeline"
+    >
+
+        <p class="no-data">
+            No incident activity detected yet.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================= -->
+<!-- AI DECISION INTELLIGENCE -->
+<!-- ================================= -->
+
+<section class="panel ai-panel">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+                🧠 AI Decision Intelligence
+            </h2>
+
+            <p>
+                Understand why SwitchGuard AI
+                detected an outage and selected
+                a recovery action.
+            </p>
+
+        </div>
+
+        <div class="monitor-status">
+
+            <span class="dot"></span>
+
+            AI ANALYSIS ACTIVE
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="ai-explanation"
+        id="aiExplanation"
+    >
+
+        <div class="ai-card">
+
+            <h3>
+                Waiting for analysis...
+            </h3>
+
+            <p>
+                SwitchGuard AI will explain
+                detected payment failure patterns
+                here.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ================================= -->
+<!-- FAILURE ANALYTICS -->
+<!-- ================================= -->
+
+<section class="panel analytics-panel">
+
+    <h2>
+        📊 Failure Analytics
+    </h2>
+
+    <p class="analytics-description">
+        Bank-wise transaction failure analysis
+        detected by SwitchGuard AI.
+    </p>
+
+
+    <div class="chart-container">
+
+        <div
+            id="noFailureMessage"
+            class="no-failure-message"
+        >
+
+            <div class="success-icon">
+                🟢
+            </div>
+
+            <h3>
+                No Failed Transactions
+            </h3>
+
+            <p>
+                All monitored banks are operating normally.
+            </p>
+
+        </div>
+
+
+        <canvas
+            id="failureChart"
+        ></canvas>
+
+    </div>
+
+</section>
+
+        <!-- ================================= -->
+        <!-- LIVE TRANSACTION MONITOR -->
+        <!-- ================================= -->
+
+        <section class="panel transaction-panel">
+
+
+            <div class="section-header">
+
+
+                <div>
+
+                    <h2>
+                        📡 Live Transaction Monitor
+                    </h2>
+
+                    <p>
+                        Real-time payment events
+                        monitored by SwitchGuard AI
+                    </p>
+
+                </div>
+
+
+                <div class="monitor-status">
+
+                    <span class="dot"></span>
+
+                    STREAMING LIVE
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- LIVE STATISTICS -->
+
+            <div class="transaction-summary">
+
+
+                <div class="transaction-stat">
+
+                    <span>
+                        Total Processed
+                    </span>
+
+                    <strong
+                        id="liveTotal"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+
+                <div class="transaction-stat success-stat">
+
+                    <span>
+                        Successful
+                    </span>
+
+                    <strong
+                        id="liveSuccess"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+
+                <div class="transaction-stat failed-stat">
+
+                    <span>
+                        Failed
+                    </span>
+
+                    <strong
+                        id="liveFailed"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- TRANSACTION TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Transaction ID
+                            </th>
+
+                            <th>
+                                Bank
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Error
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="transactionTable"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================= -->
+        <!-- SYSTEM INTELLIGENCE -->
+        <!-- ================================= -->
+
+        <section class="panel system-info">
+
+            <h2>
+                📊 System Intelligence
+            </h2>
+
+
+            <div class="system-grid">
+
+
+                <div class="system-card">
+
+                    <h3>
+                        🔍 Failure Analysis
+                    </h3>
+
+                    <p>
+                        Detects transaction failure
+                        patterns across banks.
+                    </p>
+
+                </div>
+
+
+
+                <div class="system-card">
+
+                    <h3>
+                        ⚠ Outage Detection
+                    </h3>
+
+                    <p>
+                        Calculates outage confidence
+                        using failure patterns and
+                        error concentration.
+                    </p>
+
+                </div>
+
+
+
+                <div class="system-card">
+
+                    <h3>
+                        🧠 Incident Engine
+                    </h3>
+
+                    <p>
+                        Tracks OPENED, ESCALATED
+                        and RESOLVED incidents.
+                    </p>
+
+                </div>
+
+
+
+                <div class="system-card">
+
+                    <h3>
+                        🔄 Recovery Engine
+                    </h3>
+
+                    <p>
+                        Suggests retry, monitoring,
+                        rerouting or alternative
+                        payment actions.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================= -->
+        <!-- FOOTER -->
+        <!-- ================================= -->
+
+        <footer>
+
+            <strong>
+                SwitchGuard AI © 2026
+            </strong>
+
+            <span>
+                Real-Time Intelligent Payment
+                Monitoring & Recovery System
+            </span>
+
+        </footer>
+
+
+    </div>
+
+
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
